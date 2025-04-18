@@ -1,5 +1,11 @@
 import { plainToInstance } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 enum Environment {
   Development = 'development',
@@ -40,12 +46,10 @@ export class EnvironmentVariables {
 }
 
 export function validate(config: Record<string, unknown>) {
-  const validatedConfig = plainToInstance(
-    EnvironmentVariables,
-    config,
-    { enableImplicitConversion: true },
-  );
-  
+  const validatedConfig = plainToInstance(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
+  });
+
   const errors = validateSync(validatedConfig, {
     skipMissingProperties: false,
   });
@@ -54,6 +58,6 @@ export function validate(config: Record<string, unknown>) {
     console.error(errors.toString());
     throw new Error(`Environment validation error: ${errors.toString()}`);
   }
-  
+
   return validatedConfig;
 }

@@ -1,27 +1,10 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class PrismaService
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
-  constructor(private configService: ConfigService) {
-    super({
-      datasources: {
-        db: {
-          url: configService.get('database.url'),
-        },
-      },
-    });
-  }
-
+export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$connect();
-  }
-
-  async onModuleDestroy() {
-    await this.$disconnect();
   }
 }
